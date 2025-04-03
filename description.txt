@@ -1,0 +1,64 @@
+________________________________________
+Gen_file.c
+Theo các tham số được nhập từ console:
+•	Kích thước bản đồ – chiều dài và chiều rộng;
+•	Kích thước của thiết bị bay (hình vuông – không quá 1/6 kích thước bản đồ);
+•	Số lượng chướng ngại vật (lấy hơn 65% diện tích bản đồ),
+sẽ tạo ra file map.txt chứa bản đồ với các chướng ngại vật: mỗi chướng ngại vật có điểm bắt đầu và điểm kết thúc (x1, y1, x2, y2), các giá trị này được tạo ngẫu nhiên, tuy nhiên:
+•	Các chướng ngại vật không được chồng lấn lên nhau và phải nằm trong phạm vi bản đồ;
+•	Không được bằng 1/3 chiều dài hoặc chiều rộng bản đồ;
+•	Chỉ có thể được sắp xếp theo chiều dọc, chiều ngang hoặc đường chéo;
+•	Không được là chướng ngại vật có hình dạng phức tạp.
+Lưu ý rằng khi tạo bản đồ cần giới hạn khoảng cách tối thiểu giữa các chướng ngại vật sao cho thiết bị bay chắc chắn có thể đi qua giữa chúng. Điều này sẽ làm giảm độ phức tạp của thuật toán tạo bản đồ nhưng sẽ làm tăng đáng kể số lượng tuyến đường có thể tạo ra khi tìm đường đi (trong file Alg.c).
+Sau khi tạo file map.txt: Hãy chọn điểm bắt đầu và điểm kết thúc (gọi là vị trí A và B):
+•	Hoặc nhập thủ công trong file;
+•	Hoặc nhập từ console.
+________________________________________
+Var_str.h
+Phương pháp tổ chức dữ liệu (qua struct/union) theo từng loại:
+•	Queue (Hàng đợi)
+________________________________________
+Var_str.c
+Các hàm cho Var_str.h.
+Chỉ cần triển khai tập hợp các hàm của stack/queue/... mà bạn sẽ sử dụng.
+Sử dụng con trỏ khi mô tả các trường của stack/queue/... và khi truyền vào hàm.
+Triển khai cấp phát bộ nhớ động (dùng hàm) cho các node mới của stack/queue/danh sách.
+________________________________________
+Alg.c
+Thuật toán A*
+Mục tiêu – triển khai thuật toán tìm kiếm dạng sóng để tìm tuyến đường tối ưu từ A đến B. Lưu ý rằng khi xây dựng tuyến đường, sóng chỉ lan truyền về phía không có chướng ngại vật.
+Các bước:
+1.	Thêm vị trí A vào danh sách 1 (hoặc cấu trúc dữ liệu khác phù hợp).
+2.	Đặt danh sách 1 là danh sách hiện tại.
+3.	Đối với điểm hiện tại trong danh sách, kiểm tra các điểm xung quanh theo mẫu ngôi sao (3 điểm còn lại kiểm tra theo mẫu tam giác).
+4.	Nếu tìm thấy ô trống trên bản đồ, ghi lại hướng đi từ ô mới đến ô hiện tại (lưu vào x_hướng, y_hướng). Thêm ô mới vào danh sách hiện tại.
+5.	Lặp lại bước 3-4 cho đến khi tất cả ô trống xung quanh vị trí hiện tại được thêm vào danh sách.
+6.	Lặp lại bước 3-5 cho đến khi mọi toạ độ trong danh sách hiện tại được xử lý.
+7.	Đổi danh sách hiện tại sang danh sách khác, đảo ngược lựa chọn (tức là điểm hiện tại sẽ là điểm thay thế điểm đang xét theo mẫu ngôi sao).
+8.	Lặp lại bước 3-7 cho đến khi điểm B được tìm thấy.
+9.	Khôi phục tuyến đường, đi ngược từ B về A bằng cách sử dụng các trường hướng của phần tử trong danh sách (hoặc cấu trúc dữ liệu khác).
+________________________________________
+Alg.c – Biến thể A* (1)
+Ở bước 4, khi thêm ô mới vào danh sách, hãy chọn ô tốt nhất. Để đánh giá vị trí P tốt nhất, cần cộng:
+•	Chiều dài đường đi từ A đến P (theo tuyến đường đã tìm được);
+•	Đoạn đường dự kiến từ P đến B, sử dụng:
+o	Khoảng cách Euclid (vì đây là khoảng cách ngắn nhất vật lý giữa hai điểm);
+________________________________________
+File_out.c
+Xuất và hiển thị tuyến đường tìm được cùng với thiết bị bay tại vị trí A và B trên bản đồ có chướng ngại vật.
+________________________________________
+
+Bổ sung cho tìm kiếm trong không gian 3D (Isometry)
+Gen_file.c
+•	Kích thước bản đồ – chiều dài, chiều rộng và chiều cao;
+•	Kích thước thiết bị bay (hình lập phương – không quá 1/6 kích thước bản đồ);
+•	Số lượng chướng ngại vật (hơn 53% thể tích bản đồ).
+Trong file map.txt và khi hiển thị (bằng ký tự đồ họa), hãy xuất các hình chiếu lên mặt phẳng: XOY, XOZ, YOZ.
+________________________________________
+File_out.c & Alg.c
+Vị trí trong danh sách (hoặc cấu trúc dữ liệu khác) và các ô trên bản đồ sẽ được mô tả trong không gian 3 chiều (xyz).
+Khi tìm ô trên bản đồ, ghi lại hướng đi từ ô trống mới đến ô hiện tại (lưu vào x_hướng, y_hướng, z_hướng).
+________________________________________
+Alg.c – Biến thể A* (1)
+Khi đánh giá tuyến đường dự kiến từ P đến B, chỉ sử dụng khoảng cách Mahalanobis.
+
