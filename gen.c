@@ -161,7 +161,7 @@ void place_drone(char** map, int x, int y, int drone_size, char ch) {
 //     printf("Nhap toa do goc trai tren cua drone A (theo dinh dang x y): ");
 //     while (scanf("%d %d", &ax, &ay) != 2 || !can_place_drone(map, height, width, ax, ay, drone_size)) {
 //         printf("Vi tri khong hop le hoac bi chiem. Nhap lai x y: ");
-//         // Xóa bộ đệm nhập nếu cần
+//         // Xóa bộ đ ệm nhập nếu cần
 //         while (getchar() != '\n');
 //     }
 //     place_drone(map, ax, ay, drone_size, 'A');
