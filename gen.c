@@ -173,7 +173,7 @@ void place_drone(char** map, int x, int y, int drone_size, char ch) {
 //         printf("Vi tri khong hop le hoac bi chiem. Nhap lai x y: ");
 //         while (getchar() != '\n');
 //     }
-//     place_drone(map, bx, by, drone_size, 'B');
+//     place_drone(map, d bx, by, drone_size, 'B');
 
 //     // In lại bản đồ với drone A, B
 //     printf("Ban do sau khi dat drone A va B:\n");
