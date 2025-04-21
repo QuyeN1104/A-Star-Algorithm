@@ -2,65 +2,70 @@
 #include <stdlib.h>
 #include "Var_str.h"
 
-// Tạo một Hàng đợi ưu tiên mới (rỗng)
-PriorityQueue* create_priority_queue() {
-    PriorityQueue* pq = (PriorityQueue*)malloc(sizeof(PriorityQueue));
-    if (!pq) {
-        perror("Failed to allocate memory for Priority Queue");
+// Tạo một Hàng đợi mới (rỗng)
+Queue* create_queue() {
+    Queue* q = (Queue*)malloc(sizeof(Queue));
+    if (!q) {
+        perror("Failed to allocate memory for Queue");
         exit(EXIT_FAILURE);
     }
-    pq->head = NULL;
-    return pq;
+    q->front = q->rear = NULL;
+    return q;
 }
 
-// Thêm một nút vào Hàng đợi ưu tiên, duy trì sắp xếp theo f_cost tăng dần
-void push(PriorityQueue* pq, Node* data) {
+// Thêm một nút vào cuối hàng đợi (FIFO)
+void enqueue(Queue* q, Node* data) {
     QueueNode* new_queue_node = (QueueNode*)malloc(sizeof(QueueNode));
     if (!new_queue_node) {
         perror("Failed to allocate memory for Queue Node");
-        // Có thể cần xử lý lỗi tốt hơn ở đây, ví dụ giải phóng data?
         exit(EXIT_FAILURE);
     }
     new_queue_node->data = data;
     new_queue_node->next = NULL;
 
-    // Nếu hàng đợi rỗng hoặc nút mới có f_cost nhỏ hơn nút đầu
-    if (pq->head == NULL || data->f_cost < pq->head->data->f_cost) {
-        new_queue_node->next = pq->head;
-        pq->head = new_queue_node;
-    } else {
-        // Tìm vị trí thích hợp để chèn
-        QueueNode* current = pq->head;
-        while (current->next != NULL && current->next->data->f_cost <= data->f_cost) {
-            current = current->next;
-        }
-        new_queue_node->next = current->next;
-        current->next = new_queue_node;
+    // Nếu hàng đợi rỗng, nút mới là cả front và rear
+    if (q->rear == NULL) {
+        q->front = q->rear = new_queue_node;
+        return;
     }
+
+    // Thêm vào sau nút rear hiện tại và cập nhật rear
+    q->rear->next = new_queue_node;
+    q->rear = new_queue_node;
 }
 
-// Lấy và xóa nút có f_cost thấp nhất (nút đầu tiên) khỏi hàng đợi
-Node* pop(PriorityQueue* pq) {
-    if (is_empty(pq)) {
+// Lấy và xóa nút từ đầu hàng đợi (FIFO)
+Node* dequeue(Queue* q) {
+    // Nếu hàng đợi rỗng
+    if (q->front == NULL) {
         return NULL;
     }
-    QueueNode* temp = pq->head;
+
+    // Lưu lại nút front hiện tại và dữ liệu của nó
+    QueueNode* temp = q->front;
     Node* data = temp->data;
-    pq->head = pq->head->next;
-    free(temp); // Giải phóng bộ nhớ của QueueNode, không phải Node data
+
+    // Di chuyển front tới nút tiếp theo
+    q->front = q->front->next;
+
+    // Nếu front trở thành NULL (hàng đợi rỗng sau khi dequeue), cập nhật cả rear
+    if (q->front == NULL) {
+        q->rear = NULL;
+    }
+
+    free(temp); // Giải phóng bộ nhớ của QueueNode cũ
     return data;
 }
 
 // Kiểm tra xem hàng đợi có rỗng không
-bool is_empty(PriorityQueue* pq) {
-    return pq->head == NULL;
+bool is_queue_empty(Queue* q) {
+    return q->front == NULL;
 }
 
-// Giải phóng toàn bộ bộ nhớ của hàng đợi ưu tiên
-// Lưu ý: Hàm này chỉ giải phóng các QueueNode, không giải phóng các Node data
-// Việc giải phóng Node data cần được quản lý riêng biệt (thường là trong Alg.c)
-void free_priority_queue(PriorityQueue* pq) {
-    QueueNode* current = pq->head;
+// Giải phóng toàn bộ bộ nhớ của hàng đợi
+// Chỉ giải phóng QueueNode, không giải phóng Node data
+void free_queue(Queue* q) {
+    QueueNode* current = q->front;
     QueueNode* next_node;
     while (current != NULL) {
         next_node = current->next;
@@ -68,5 +73,5 @@ void free_priority_queue(PriorityQueue* pq) {
         free(current);
         current = next_node;
     }
-    free(pq);
+    free(q);
 }
