@@ -1,34 +1,34 @@
 #ifndef VAR_STR_H
 #define VAR_STR_H
 
-#include <stdbool.h> // Để sử dụng kiểu bool
+#include <stdbool.h> // To use the bool type
 
-// Định nghĩa cấu trúc cho một nút trên lưới (ô bản đồ)
+// Define structure for a node on the grid (map cell)
 typedef struct Node {
-    int x, y;          // Tọa độ
-    double g_cost;     // Chi phí thực tế từ A đến nút này
-    double h_cost;     // Chi phí ước tính (heuristic) từ nút này đến B
-    double f_cost;     // Tổng chi phí (f = g + h)
-    struct Node* parent; // Con trỏ tới nút cha để truy vết đường đi
+    int x, y, z;       // Coordinates (added z for 3D space)
+    double g_cost;     // Actual cost from A to this node
+    double h_cost;     // Estimated cost (heuristic) from this node to B
+    double f_cost;     // Total cost (f = g + h)
+    struct Node* parent; // Pointer to the parent node for path tracing
 } Node;
 
-// Định nghĩa cấu trúc cho một phần tử trong Hàng đợi ưu tiên
+// Define structure for an element in the priority queue
 typedef struct QueueNode {
-    Node* data;             // Con trỏ tới dữ liệu Node
-    struct QueueNode* next; // Con trỏ tới phần tử tiếp theo
+    Node* data;             // Pointer to the Node data
+    struct QueueNode* next; // Pointer to the next element
 } QueueNode;
 
-// Định nghĩa cấu trúc Hàng đợi ưu tiên
+// Define structure for the priority queue
 typedef struct Queue {
-    QueueNode* front; // Con trỏ tới đầu hàng đợi (để lấy ra - dequeue)
-    QueueNode* rear;  // Con trỏ tới cuối hàng đợi (để thêm vào - enqueue)
+    QueueNode* front; // Pointer to the front of the queue (for dequeue)
+    QueueNode* rear;  // Pointer to the rear of the queue (for enqueue)
 } Queue;
 
-// Khai báo các hàm cho Hàng đợi ưu tiên
-Queue* create_queue(); // Tạo một hàng đợi mới
-void enqueue_with_priority(Queue* q, Node* data); // Thêm vào hàng đợi theo thứ tự f_cost
-Node* dequeue_min(Queue* q); // Lấy ra nút có f_cost nhỏ nhất
-bool is_queue_empty(Queue* q); // Kiểm tra xem hàng đợi có rỗng không
-void free_queue(Queue* q); // Giải phóng bộ nhớ của hàng đợi
+// Declare functions for the priority queue
+Queue* create_queue(); // Create a new queue
+void enqueue_with_priority(Queue* q, Node* data); // Add to the queue in f_cost order
+Node* dequeue_min(Queue* q); // Remove the node with the smallest f_cost
+bool is_queue_empty(Queue* q); // Check if the queue is empty
+void free_queue(Queue* q); // Free the memory of the queue
 
 #endif // VAR_STR_H

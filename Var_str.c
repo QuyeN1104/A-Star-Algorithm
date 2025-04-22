@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "Var_str.h"
 
-// Tạo một Hàng đợi ưu tiên mới (rỗng)
+// Create a new (empty) priority queue
 Queue* create_queue() {
     Queue* q = (Queue*)malloc(sizeof(Queue));
     if (!q) {
@@ -13,7 +13,7 @@ Queue* create_queue() {
     return q;
 }
 
-// Thêm một nút vào hàng đợi ưu tiên theo f_cost tăng dần
+// Add a node to the priority queue in ascending order of f_cost
 void enqueue_with_priority(Queue* q, Node* data) {
     QueueNode* new_node = (QueueNode*)malloc(sizeof(QueueNode));
     if (!new_node) {
@@ -23,20 +23,20 @@ void enqueue_with_priority(Queue* q, Node* data) {
     new_node->data = data;
     new_node->next = NULL;
 
-    // Nếu hàng đợi rỗng
+    // If the queue is empty
     if (!q->front) {
         q->front = q->rear = new_node;
         return;
     }
 
-    // Chèn vào đầu nếu f_cost nhỏ hơn node đầu tiên
+    // Insert at the front if f_cost is smaller than the first node
     if (data->f_cost < q->front->data->f_cost) {
         new_node->next = q->front;
         q->front = new_node;
         return;
     }
 
-    // Tìm vị trí thích hợp để chèn
+    // Find the appropriate position to insert
     QueueNode* current = q->front;
     while (current->next && current->next->data->f_cost <= data->f_cost) {
         current = current->next;
@@ -49,7 +49,7 @@ void enqueue_with_priority(Queue* q, Node* data) {
     }
 }
 
-// Lấy và xóa nút có f_cost nhỏ nhất từ hàng đợi
+// Remove and return the node with the smallest f_cost from the queue
 Node* dequeue_min(Queue* q) {
     if (!q->front) return NULL;
 
@@ -63,12 +63,12 @@ Node* dequeue_min(Queue* q) {
     return data;
 }
 
-// Kiểm tra xem hàng đợi có rỗng không
+// Check if the queue is empty
 bool is_queue_empty(Queue* q) {
     return q->front == NULL;
 }
 
-// Giải phóng toàn bộ bộ nhớ của hàng đợi
+// Free all memory of the queue
 void free_queue(Queue* q) {
     while (!is_queue_empty(q)) {
         Node* node = dequeue_min(q);
