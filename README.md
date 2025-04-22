@@ -7,7 +7,8 @@ This project implements the A* algorithm for finding the optimal path in both 2D
 1. **Compile the Project**:
    Use a C compiler (e.g., `gcc`) to compile the project. Ensure all source files are in the same directory.
    ```bash
-   gcc -o astar File_out.c Var_str.c Alg.c gen.c -lm
+   gcc -o astar File_out.c Var_str.c -lm  
+   
    ```
 
 2. **Run the Executable**:
